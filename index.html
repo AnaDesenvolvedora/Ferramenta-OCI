@@ -72,7 +72,17 @@
         .collapse-icon { transition: transform 0.3s ease; }
         .collapse-icon.open { transform: rotate(180deg); }
         .ferramentas-sub { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-        .ferramentas-sub.open { max-height: 600px; }
+        .ferramentas-sub.open { max-height: 800px; }
+        .tabela-scroll { overflow-x: auto; }
+        .tabela-scroll table { min-width: 100%; }
+        .tabela-scroll th { white-space: nowrap; font-size: 10px; }
+        .tabela-scroll td { font-size: 12px; }
+        .linha-timeline { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .timeline-step { font-size: 9px; padding: 2px 6px; border-radius: 12px; font-weight: 600; }
+        .timeline-step.done { background: #10b981; color: white; }
+        .timeline-step.active { background: #3b82f6; color: white; }
+        .timeline-step.pending { background: #e2e8f0; color: #64748b; }
+        .fluxo-total { background: #f1f5f9; padding: 16px; border-radius: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden">
@@ -307,7 +317,7 @@ function showScreen(screenId) {
             
             <!-- 📋 Portal do Retorno - Link externo -->
             <a href="https://paineldousuario.regulacaoconsolidados.workers.dev/#" target="_blank" class="sidebar-item flex items-center gap-3 p-3 rounded-xl text-sm text-emerald-400 font-bold hover:bg-white/10 transition-all">
-                <i class="fas fa-external-link-alt w-4"></i> 📋 Portal de Retorno
+                <i class="fas fa-external-link-alt w-4"></i> 📋 Portal do Retorno
             </a>
             
             <!-- ⚙️ Administração - Apenas admin -->
@@ -388,6 +398,8 @@ function showScreen(screenId) {
             
             <!-- ============ 🧠 LÓGICA E INDICADORES ============ -->
             <div id="content-logica-indicadores" class="tab-content active space-y-6">
+                
+                <!-- HEADER -->
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg">
                     <h2 class="text-xl font-extrabold mb-2"><i class="fas fa-brain mr-2"></i> Lógica e Indicadores do Ferramenta OCI v7.0</h2>
                     <p class="text-blue-100 text-sm">Entenda como funciona a Linha do Cuidado OCI e todos os seus indicadores</p>
@@ -395,29 +407,53 @@ function showScreen(screenId) {
 
                 <!-- 🔄 FLUXO DA LINHA DO CUIDADO -->
                 <div class="bg-white rounded-2xl shadow-sm border p-6">
-                    <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-project-diagram text-blue-500 mr-2"></i>🔄 Fluxo da Linha do Cuidado OCI</h3>
-                    <div class="flex flex-wrap gap-2 items-center text-sm">
-                        <span class="fluxo-step bg-sky-100 text-sky-700"><i class="fas fa-clock mr-1"></i> 1ª Cons. Agendada</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-cyan-100 text-cyan-700"><i class="fas fa-clipboard-check mr-1"></i> 1ª Cons. Recepcionada</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-blue-100 text-blue-700"><i class="fas fa-flask mr-1"></i> Solicita Exames (Portal)</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-amber-100 text-amber-700"><i class="fas fa-hourglass-half mr-1"></i> Aguardando Exames</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1"></i> Apto p/ Retorno</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-indigo-100 text-indigo-700"><i class="fas fa-calendar-plus mr-1"></i> Retorno Agendado</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-teal-100 text-teal-700"><i class="fas fa-calendar-check mr-1"></i> Retorno Recepcionado</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-purple-100 text-purple-700"><i class="fas fa-file-invoice mr-1"></i> OCI Fechada</span>
-                        <span class="fluxo-arrow">→</span>
-                        <span class="fluxo-step bg-pink-100 text-pink-700"><i class="fas fa-file-medical mr-1"></i> APAC Gerada</span>
+                    <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-project-diagram text-blue-500 mr-2"></i> Fluxo da Linha do Cuidado OCI</h3>
+                    
+                    <div class="fluxo-total">
+                        <!-- Linha principal -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <span class="fluxo-step bg-sky-100 text-sky-700"><i class="fas fa-clock mr-1"></i> 1ª Cons. Agendada</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-cyan-100 text-cyan-700"><i class="fas fa-clipboard-check mr-1"></i> 1ª Cons. Recepcionada</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-blue-100 text-blue-700"><i class="fas fa-flask mr-1"></i> Solicita Exames (Portal)</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-amber-100 text-amber-700"><i class="fas fa-hourglass-half mr-1"></i> Aguardando Exames</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1"></i> Apto p/ Retorno</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-indigo-100 text-indigo-700"><i class="fas fa-calendar-plus mr-1"></i> Retorno Agendado</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-teal-100 text-teal-700"><i class="fas fa-calendar-check mr-1"></i> Retorno Recepcionado</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-purple-100 text-purple-700"><i class="fas fa-file-invoice mr-1"></i> OCI Fechada</span>
+                            <span class="fluxo-arrow">→</span>
+                            <span class="fluxo-step bg-pink-100 text-pink-700"><i class="fas fa-file-medical mr-1"></i> APAC Gerada</span>
+                        </div>
+                        
+                        <!-- Linha de absenteísmo -->
+                        <div class="flex flex-wrap gap-2 items-center mt-3 pt-3 border-t border-slate-200">
+                            <span class="text-xs font-bold text-slate-400 mr-2">⚠️ Absenteísmo:</span>
+                            <span class="fluxo-step bg-orange-100 text-orange-700"><i class="fas fa-user-times mr-1"></i> Absenteísmo 1ª Consulta</span>
+                            <span class="fluxo-step bg-red-100 text-red-700"><i class="fas fa-user-slash mr-1"></i> Absenteísmo Retorno</span>
+                        </div>
                     </div>
-                    <div class="flex flex-wrap gap-2 mt-4">
-                        <span class="fluxo-step bg-orange-100 text-orange-700"><i class="fas fa-user-times mr-1"></i> Absenteísmo 1ª Consulta</span>
-                        <span class="fluxo-step bg-red-100 text-red-700"><i class="fas fa-user-slash mr-1"></i> Absenteísmo Retorno</span>
+                    
+                    <!-- Texto explicativo -->
+                    <div class="mt-4 p-4 bg-slate-50 rounded-xl text-sm text-slate-600">
+                        <p class="font-bold text-slate-700 mb-2">📌 Como funciona a Linha do Cuidado OCI:</p>
+                        <ul class="list-disc list-inside space-y-1 text-xs">
+                            <li><strong>1ª Consulta Agendada:</strong> Paciente agendado para primeira consulta na especialidade.</li>
+                            <li><strong>1ª Consulta Recepcionada:</strong> Paciente compareceu e foi atendido na primeira consulta.</li>
+                            <li><strong>Solicita Exames (Portal):</strong> Paciente acessa o Portal e solicita os exames necessários.</li>
+                            <li><strong>Aguardando Exames:</strong> Exames solicitados, aguardando realização.</li>
+                            <li><strong>Apto p/ Retorno:</strong> Todos os exames realizados, paciente pronto para retorno.</li>
+                            <li><strong>Retorno Agendado:</strong> Retorno médico agendado.</li>
+                            <li><strong>Retorno Recepcionado:</strong> Retorno médico realizado.</li>
+                            <li><strong>OCI Fechada:</strong> Ciclo da OCI concluído com sucesso.</li>
+                            <li><strong>APAC Gerada:</strong> APAC emitida para o paciente.</li>
+                            <li><strong>Absenteísmo:</strong> Paciente faltou à consulta (1ª ou retorno).</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -429,29 +465,117 @@ function showScreen(screenId) {
                             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg"><span class="text-sm font-bold text-slate-700">🫀 Cardiologia</span><span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">ECG; ERG</span></div>
                             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg"><span class="text-sm font-bold text-slate-700">🦴 Ortopedia</span><span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">RX; USG; TOMO</span></div>
                             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg"><span class="text-sm font-bold text-slate-700">🎗️ Oncologia</span><span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">BIO; AP; USG</span></div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg"><span class="text-sm font-bold text-slate-700">👁️ Oftalmologia</span><span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">Mapeamento; Tonometria</span></div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg"><span class="text-sm font-bold text-slate-700">👂 Otorrino</span><span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">Audiometria; Videolaringo</span></div>
                         </div>
                     </div>
+                    
                     <div class="bg-white rounded-2xl shadow-sm border p-6 card-emerald">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-chart-line text-emerald-500"></i> Indicadores Críticos</h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <div class="text-center p-3 bg-emerald-50 rounded-xl"><p class="text-[10px] text-emerald-600 font-bold uppercase">Taxa Comparecimento</p><p class="text-2xl font-black text-emerald-700" id="indTaxaComparecimento">—</p></div>
+                            <div class="text-center p-3 bg-emerald-50 rounded-xl">
+                                <p class="text-[10px] text-emerald-600 font-bold uppercase">Taxa de Comparecimento</p>
+                                <p class="text-2xl font-black text-emerald-700" id="indTaxaComparecimento">—</p>
+                                <p class="text-[9px] text-emerald-500">(OCIs Fechadas + APACs) / Total</p>
+                            </div>
                             <div class="flex gap-3">
-                                <div class="flex-1 text-center p-3 bg-blue-50 rounded-xl"><p class="text-[10px] text-blue-600 font-bold uppercase">Tempo Médio OCI</p><p class="text-xl font-black text-blue-700" id="indTempoMedio">—</p></div>
-                                <div class="flex-1 text-center p-3 bg-purple-50 rounded-xl"><p class="text-[10px] text-purple-600 font-bold uppercase">Retornos Realizados</p><p class="text-xl font-black text-purple-700" id="indRetornosRealizados">—</p></div>
+                                <div class="flex-1 text-center p-3 bg-blue-50 rounded-xl">
+                                    <p class="text-[10px] text-blue-600 font-bold uppercase">Tempo Médio OCI</p>
+                                    <p class="text-xl font-black text-blue-700" id="indTempoMedio">—</p>
+                                    <p class="text-[9px] text-blue-500">dias em média</p>
+                                </div>
+                                <div class="flex-1 text-center p-3 bg-purple-50 rounded-xl">
+                                    <p class="text-[10px] text-purple-600 font-bold uppercase">Retornos Realizados</p>
+                                    <p class="text-xl font-black text-purple-700" id="indRetornosRealizados">—</p>
+                                    <p class="text-[9px] text-purple-500">total de retornos</p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="bg-white rounded-2xl shadow-sm border p-6 card-rose">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-exclamation-triangle text-rose-500"></i> Alertas de Fechamento</h3>
                         <div class="space-y-3" id="alertasFechamento">
                             <div class="p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-3">
                                 <div class="w-8 h-8 bg-rose-500 text-white rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-clock"></i></div>
-                                <div><p class="text-xs font-bold text-rose-700">OCIs Pendentes</p><p class="text-[10px] text-rose-600">Acima do prazo da especialidade</p></div>
+                                <div>
+                                    <p class="text-xs font-bold text-rose-700">OCIs Pendentes</p>
+                                    <p class="text-[10px] text-rose-600">Acima do prazo da especialidade</p>
+                                    <p class="text-[10px] font-bold text-rose-700 mt-1" id="alertOcisPendentes">0</p>
+                                </div>
                             </div>
                             <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
                                 <div class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-flask"></i></div>
-                                <div><p class="text-xs font-bold text-amber-700">Exames em atraso</p><p class="text-[10px] text-amber-600">Aguardando realização</p></div>
+                                <div>
+                                    <p class="text-xs font-bold text-amber-700">Exames em atraso</p>
+                                    <p class="text-[10px] text-amber-600">Aguardando realização</p>
+                                    <p class="text-[10px] font-bold text-amber-700 mt-1" id="alertExamesAtraso">0</p>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTEGRAÇÃO COM PORTAL DO PACIENTE -->
+                <div class="bg-white rounded-2xl shadow-sm border p-6">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-link text-purple-500 mr-2"></i> 🔗 Integração com Portal do Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-purple-50 rounded-xl p-4 border border-purple-200">
+                            <h4 class="font-bold text-purple-700 mb-2"><i class="fas fa-laptop-medical mr-2"></i> Portal do Paciente</h4>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>✅ Usuário faz login com CPF e senha</li>
+                                <li>✅ Digita o Nº da Solicitação da 1ª Consulta</li>
+                                <li>✅ Seleciona SubGrupo SIGTAP</li>
+                                <li>✅ Marca exames com datas de solicitação e realização</li>
+                                <li>✅ Se TODOS realizados → <b>APTO PARA RETORNO</b></li>
+                                <li>✅ Se algum pendente → <b>AGUARDANDO EXAMES</b></li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                            <h4 class="font-bold text-blue-700 mb-2"><i class="fas fa-sync-alt mr-2"></i> Ferramenta OCI (Painel Admin)</h4>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>📊 Monitora todo o fluxo em tempo real</li>
+                                <li>📊 Atualiza automaticamente a cada 30 segundos</li>
+                                <li>📊 Migração automática entre status</li>
+                                <li>📊 👁️ Oftalmologia fecha OCI na 1ª consulta</li>
+                                <li>📊 Gráficos e relatórios completos</li>
+                                <li>📊 Exportação Excel em todos os tópicos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REGRAS DE NEGÓCIO -->
+                <div class="bg-white rounded-2xl shadow-sm border p-6">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800"><i class="fas fa-gavel text-amber-500 mr-2"></i> 📋 Regras de Negócio</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                            <h4 class="font-bold text-amber-700 mb-2">⏱️ Prazos por Especialidade</h4>
+                            <ul class="text-xs text-slate-600 space-y-1">
+                                <li>🫀 Cardiologia: <b>60 dias</b></li>
+                                <li>🦴 Ortopedia: <b>60 dias</b></li>
+                                <li>🎗️ Oncologia: <b>30 dias</b></li>
+                                <li>👁️ Oftalmologia: <b>60 dias</b></li>
+                                <li>👂 Otorrino: <b>60 dias</b></li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                            <h4 class="font-bold text-green-700 mb-2">🔑 Chaves de Migração</h4>
+                            <ul class="text-xs text-slate-600 space-y-1">
+                                <li>1️⃣ Especialidade</li>
+                                <li>2️⃣ Médico Solicitante</li>
+                                <li>3️⃣ CPF do Paciente</li>
+                                <li>4️⃣ Nº Prontuário</li>
+                            </ul>
+                            <p class="text-[10px] text-slate-400 mt-2">As 4 chaves precisam conferir para migrar</p>
+                        </div>
+                        <div class="bg-rose-50 rounded-xl p-4 border border-rose-200">
+                            <h4 class="font-bold text-rose-700 mb-2">⚠️ Alertas</h4>
+                            <ul class="text-xs text-slate-600 space-y-1">
+                                <li>🔴 <b>OCI Pendente:</b> Acima do prazo</li>
+                                <li>🟡 <b>Atenção:</b> 80% do prazo atingido</li>
+                                <li>🟢 <b>Dentro do Prazo:</b> Menos de 80%</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -464,11 +588,18 @@ function showScreen(screenId) {
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead><tr class="text-left bg-white"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Paciente</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Especialidade</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Progresso OCI</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Exames</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th></tr></thead>
+                            <thead><tr class="text-left bg-white">
+                                <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Paciente</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Especialidade</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Progresso OCI</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Exames</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th>
+                            </tr></thead>
                             <tbody class="divide-y divide-slate-100">
                                 <tr><td class="px-4 py-3"><p class="font-bold text-slate-700">MARIA SILVA</p><p class="text-[10px] text-slate-400">Pront: 12345</p></td><td class="px-4 py-3"><span class="px-2 py-1 bg-blue-50 text-blue-600 rounded-md text-[10px] font-bold">CARDIOLOGIA</span></td><td class="px-4 py-3"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full" style="width: 20%"></div></div><p class="text-[9px] font-bold text-blue-600 mt-1">20% - EM ANDAMENTO</p></td><td class="px-4 py-3 text-xs font-medium text-slate-600">ECG, ERG</td><td class="px-4 py-3"><span class="flex items-center gap-1.5 text-blue-600 font-bold text-[10px] uppercase"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Em Andamento</span></td></tr>
                                 <tr><td class="px-4 py-3"><p class="font-bold text-slate-700">JOÃO PEREIRA</p><p class="text-[10px] text-slate-400">Pront: 54321</p></td><td class="px-4 py-3"><span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-md text-[10px] font-bold">ORTOPEDIA</span></td><td class="px-4 py-3"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-amber-500 h-full" style="width: 40%"></div></div><p class="text-[9px] font-bold text-amber-600 mt-1">40% - AGUARDANDO EXAME</p></td><td class="px-4 py-3 text-xs font-medium text-slate-600">RX, USG, TOMO</td><td class="px-4 py-3"><span class="flex items-center gap-1.5 text-amber-600 font-bold text-[10px] uppercase"><span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> Ag. Exame</span></td></tr>
                                 <tr><td class="px-4 py-3"><p class="font-bold text-slate-700">ANA OLIVEIRA</p><p class="text-[10px] text-slate-400">Pront: 67890</p></td><td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-md text-[10px] font-bold">ONCOLOGIA</span></td><td class="px-4 py-3"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full" style="width: 60%"></div></div><p class="text-[9px] font-bold text-emerald-600 mt-1">60% - APTO RETORNO</p></td><td class="px-4 py-3 text-xs font-medium text-slate-600">BIO, AP, USG</td><td class="px-4 py-3"><span class="flex items-center gap-1.5 text-emerald-600 font-bold text-[10px] uppercase"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Apto Retorno</span></td></tr>
+                                <tr><td class="px-4 py-3"><p class="font-bold text-slate-700">CARLOS SOUZA</p><p class="text-[10px] text-slate-400">Pront: 24680</p></td><td class="px-4 py-3"><span class="px-2 py-1 bg-purple-50 text-purple-600 rounded-md text-[10px] font-bold">CARDIOLOGIA</span></td><td class="px-4 py-3"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-purple-500 h-full" style="width: 100%"></div></div><p class="text-[9px] font-bold text-purple-600 mt-1">100% - OCI FECHADA</p></td><td class="px-4 py-3 text-xs font-medium text-slate-600">ECG, ERG</td><td class="px-4 py-3"><span class="flex items-center gap-1.5 text-purple-600 font-bold text-[10px] uppercase"><span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span> OCI Fechada</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -503,15 +634,13 @@ function showScreen(screenId) {
                 </div>
             </div>
 
-            <!-- ============ DEMONSTRAÇÃO DOS FILTROS (CONTINUA NA PRÓXIMA PARTE) ============ -->
-            
             <!-- ============ 👥 MONITORAMENTO ============ -->
             <div id="content-monitoramento" class="tab-content space-y-4">
                 <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
                     <div class="p-4 border-b flex flex-wrap gap-3 items-center justify-between">
                         <h3 class="text-lg font-bold">👥 Monitoramento de Pacientes</h3>
                         <div class="flex flex-wrap gap-2">
-                            <input type="text" id="buscaMonitoramento" placeholder="🔍 Buscar por Prontuário ou Nº Solicitação..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('monitoramento')">
+                            <input type="text" id="buscaMonitoramento" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('monitoramento')">
                             <select id="filtroEspecialidadeMonitoramento" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="filtrarTabela('monitoramento')"><option value="">Todas Especialidades</option></select>
                             <select id="filtroStatusMonitoramento" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="filtrarTabela('monitoramento')"><option value="">Todos Status</option><option value="agendada">Agendada</option><option value="recepcionada">Recepcionada</option><option value="aguardando_exame">Aguardando Exame</option><option value="apto_retorno">Apto Retorno</option><option value="retorno_agendado">Retorno Agendado</option><option value="retorno_recepcionado">Retorno Recepcionado</option><option value="oci_fechada">OCI Fechada</option><option value="apac_gerada">APAC Gerada</option><option value="faltou">Faltou 1ª Consulta</option><option value="retorno_faltou">Faltou Retorno</option><option value="cancelada">Cancelada</option><option value="transferida">Transferida</option></select>
                             <select id="paginaMonitoramento" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('monitoramento')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
@@ -520,13 +649,15 @@ function showScreen(screenId) {
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead><tr class="bg-slate-50">
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','prontuario')">Prontuário <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','nome')">Paciente <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','cpf')">CPF <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','especialidade')">Especialidade <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento','status')">Status <i class="fas fa-sort"></i></th>
-                                <th class="px-4 py-3 text-xs font-bold uppercase">Alerta</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">LINHA DO CUIDADO TIMELINE</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">STATUS</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">DIAS RESTANTES</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">ALERTA</th>
                             </tr></thead>
                             <tbody class="divide-y" id="tabelaMonitoramento"></tbody>
                         </table>
@@ -541,7 +672,7 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 items-center justify-between">
                         <h3 class="text-lg font-bold">🧪 Monitoramento de Exames</h3>
                         <div class="flex flex-wrap gap-2">
-                            <input type="text" id="buscaMonitoramentoExames" placeholder="🔍 Buscar paciente..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('monitoramento-exames')">
+                            <input type="text" id="buscaMonitoramentoExames" placeholder="Buscar paciente..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('monitoramento-exames')">
                             <select id="paginaMonitoramentoExames" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('monitoramento-exames')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('monitoramento-exames')" class="bg-pink-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-pink-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
@@ -549,13 +680,15 @@ function showScreen(screenId) {
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead><tr class="bg-slate-50">
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','prontuario')">Prontuário <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','nome')">Paciente <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','exame')">Exame <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','data_solicitacao')">📅 Solicitação <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','data_realizacao')">📅 Realização <i class="fas fa-sort"></i></th>
-                                <th class="px-3 py-2 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('monitoramento-exames','status_exame')">Status <i class="fas fa-sort"></i></th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAME</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA SOLICITAÇÃO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">DIAS ATÉ REALIZAÇÃO</th>
+                                <th class="px-3 py-2 text-[10px] font-bold uppercase">STATUS</th>
                             </tr></thead>
                             <tbody class="divide-y" id="tabelaMonitoramentoExames"></tbody>
                         </table>
@@ -570,13 +703,23 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">🕐 1ª Consulta Agendadas</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaPrimeiraConsultaAgendadas" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('primeira-consulta-agendadas')">
+                            <input type="text" id="buscaPrimeiraConsultaAgendadas" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('primeira-consulta-agendadas')">
                             <select id="paginaPrimeiraConsultaAgendadas" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('primeira-consulta-agendadas')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('primeira-consulta-agendadas')" class="bg-sky-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-sky-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta-agendadas','data')">Data Agendada <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaPrimeiraConsultaAgendadas"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA AGENDADA</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">OPERADOR</th>
+                        </tr></thead><tbody id="tabelaPrimeiraConsultaAgendadas"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoPrimeiraConsultaAgendadas"></div>
                 </div>
@@ -588,13 +731,25 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">🆕 1ª Consulta Recepcionados</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaPrimeiraConsulta" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('primeira-consulta')">
+                            <input type="text" id="buscaPrimeiraConsulta" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('primeira-consulta')">
                             <select id="paginaPrimeiraConsulta" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('primeira-consulta')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('primeira-consulta')" class="bg-cyan-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-cyan-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('primeira-consulta','data')">Data <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaPrimeiraConsulta"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONSULTA</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">OPERADOR</th>
+                        </tr></thead><tbody id="tabelaPrimeiraConsulta"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoPrimeiraConsulta"></div>
                 </div>
@@ -606,13 +761,27 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">✅ Aptos para o Retorno</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaAptosRetorno" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('aptos-retorno')">
+                            <input type="text" id="buscaAptosRetorno" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('aptos-retorno')">
                             <select id="paginaAptosRetorno" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('aptos-retorno')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('aptos-retorno')" class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-emerald-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('aptos-retorno','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('aptos-retorno','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('aptos-retorno','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('aptos-retorno','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('aptos-retorno','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase">Exames <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase">Data Realização <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaAptosRetorno"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAMES</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CADASTRADO POR</th>
+                        </tr></thead><tbody id="tabelaAptosRetorno"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoAptosRetorno"></div>
                 </div>
@@ -624,13 +793,29 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">📅 Retornos Agendados</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaRetornosAgendados" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('retornos-agendados')">
+                            <input type="text" id="buscaRetornosAgendados" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('retornos-agendados')">
                             <select id="paginaRetornosAgendados" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('retornos-agendados')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('retornos-agendados')" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase">Nº Solic. 1ª Cons.</th><th class="px-4 py-3 text-xs font-bold uppercase">Nº Solic. Retorno</th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-agendados','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-agendados','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-agendados','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase">Data Retorno <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaRetornosAgendados"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLIC. 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLIC. RETORNO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA RETORNO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAMES</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CADASTRADO POR</th>
+                        </tr></thead><tbody id="tabelaRetornosAgendados"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoRetornosAgendados"></div>
                 </div>
@@ -642,13 +827,29 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">📋 Retornos Recepcionados</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaRetornosRecepcionados" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('retornos-recepcionados')">
+                            <input type="text" id="buscaRetornosRecepcionados" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('retornos-recepcionados')">
                             <select id="paginaRetornosRecepcionados" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('retornos-recepcionados')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('retornos-recepcionados')" class="bg-teal-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-teal-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase">Nº Solic. 1ª Cons.</th><th class="px-4 py-3 text-xs font-bold uppercase">Nº Solic. Retorno</th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-recepcionados','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-recepcionados','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('retornos-recepcionados','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase">Data Recepção <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaRetornosRecepcionados"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLIC. 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLIC. RETORNO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA RECEPÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAMES</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CADASTRADO POR</th>
+                        </tr></thead><tbody id="tabelaRetornosRecepcionados"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoRetornosRecepcionados"></div>
                 </div>
@@ -660,13 +861,23 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">🚫 1ª Consulta - Absenteísmo</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaAbsenteismo1Consulta" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('absenteismo-1consulta')">
+                            <input type="text" id="buscaAbsenteismo1Consulta" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('absenteismo-1consulta')">
                             <select id="paginaAbsenteismo1Consulta" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('absenteismo-1consulta')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('absenteismo-1consulta')" class="bg-orange-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-orange-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-1consulta','data')">Data <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaAbsenteismo1Consulta"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA</th>
+                        </tr></thead><tbody id="tabelaAbsenteismo1Consulta"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoAbsenteismo1Consulta"></div>
                 </div>
@@ -678,13 +889,23 @@ function showScreen(screenId) {
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <h3 class="text-lg font-bold">🚫 Retorno - Absenteísmo</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="buscaAbsenteismoRetorno" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('absenteismo-retorno')">
+                            <input type="text" id="buscaAbsenteismoRetorno" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('absenteismo-retorno')">
                             <select id="paginaAbsenteismoRetorno" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('absenteismo-retorno')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('absenteismo-retorno')" class="bg-red-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-red-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('absenteismo-retorno','data')">Data Retorno <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaAbsenteismoRetorno"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA RETORNO</th>
+                        </tr></thead><tbody id="tabelaAbsenteismoRetorno"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoAbsenteismoRetorno"></div>
                 </div>
@@ -694,7 +915,7 @@ function showScreen(screenId) {
             <div id="content-apac" class="tab-content space-y-4">
                 <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
-                        <div><h3 class="text-lg font-bold">📄 OCIs Fechadas</h3><p class="text-xs text-slate-500 mt-1">Pacientes que passaram pelos Retornos Recepcionados - Pronto para gerar APAC</p></div>
+                        <div><h3 class="text-lg font-bold">📄 OCI´s Fechadas</h3><p class="text-xs text-slate-500 mt-1">Pacientes que passaram pelos Retornos Recepcionados - Pronto para gerar APAC</p></div>
                     </div>
                     <div class="p-4 bg-slate-50 border-b flex flex-wrap gap-3 items-center">
                         <span class="text-xs font-bold text-slate-600">📅 Período:</span>
@@ -705,13 +926,35 @@ function showScreen(screenId) {
                     </div>
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <div class="flex gap-2">
-                            <input type="text" id="buscaAPAC" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('apac')">
+                            <input type="text" id="buscaAPAC" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('apac')">
                             <select id="paginaAPAC" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('apac')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('apac')" class="bg-purple-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apac','data_fechamento')">Data Fechamento <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaAPAC"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA NASC.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">NOME DA MÃE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">TELEFONE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CEP</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ENDEREÇO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">SEXO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA FECHAMENTO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAMES</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CID</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CADASTRADO POR</th>
+                        </tr></thead><tbody id="tabelaAPAC"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoAPAC"></div>
                 </div>
@@ -732,13 +975,29 @@ function showScreen(screenId) {
                     </div>
                     <div class="p-4 border-b flex flex-wrap gap-3 justify-between">
                         <div class="flex gap-2">
-                            <input type="text" id="buscaAPACSGeradas" placeholder="🔍 Buscar..." class="px-4 py-2 border rounded-xl text-sm w-64" oninput="filtrarTabela('apacs-geradas')">
+                            <input type="text" id="buscaAPACSGeradas" placeholder="Buscar..." class="px-4 py-2 border rounded-xl text-sm w-48" oninput="filtrarTabela('apacs-geradas')">
                             <select id="paginaAPACSGeradas" class="px-3 py-2 border rounded-xl text-sm filter-select-custom" onchange="mudarPagina('apacs-geradas')"><option value="15">15</option><option value="30">30</option><option value="50">50</option><option value="100" selected>100</option></select>
                             <button onclick="exportarExcel('apacs-geradas')" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-700"><i class="fas fa-download"></i> Excel</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full"><thead><tr class="bg-slate-50"><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','numero_solicitacao')">Nº Solicitação <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','prontuario')">Prontuário <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','nome')">Paciente <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','cpf')">CPF <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','especialidade')">Especialidade <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable bg-indigo-50" onclick="ordenarTabela('apacs-geradas','numero_apac')">Nº APAC <i class="fas fa-sort"></i></th><th class="px-4 py-3 text-xs font-bold uppercase th-sortable" onclick="ordenarTabela('apacs-geradas','data_fechamento')">Data Fechamento <i class="fas fa-sort"></i></th></tr></thead><tbody id="tabelaAPACSGeradas"></tbody></table>
+                        <table class="w-full"><thead><tr class="bg-slate-50">
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">Nº SOLICITAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PRONTUÁRIO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">PACIENTE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CPF</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">UNIDADE DE SAÚDE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">ESPECIALIDADE</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">GRUPO/SUBGRUPO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">MÉDICO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">LOCAL</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA 1ª CONS.</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA FECHAMENTO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase bg-indigo-50">Nº APAC</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">EXAMES</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">DATA REALIZAÇÃO</th>
+                            <th class="px-3 py-2 text-[10px] font-bold uppercase">CADASTRADO POR</th>
+                        </tr></thead><tbody id="tabelaAPACSGeradas"></tbody></table>
                     </div>
                     <div class="p-4 border-t" id="paginacaoAPACSGeradas"></div>
                 </div>
@@ -752,7 +1011,7 @@ function showScreen(screenId) {
 // ============================================
 // 🏥 FERRAMENTA OCI v7.0 - JAVASCRIPT PRINCIPAL
 // 👑 Ana Paula Araújo da Silva | Mat: 201704
-// 📅 06/06/2026 - VERSÃO REFORMADA COMPLETA
+// 📅 06/06/2026 - VERSÃO COMPLETA COM NOMENCLATURAS ORIGINAIS
 // ============================================
 
 const SUPABASE_URL = 'https://hheuvkyhwujdrvjvtryg.supabase.co';
@@ -963,9 +1222,6 @@ function getStatusBadge(status) {
     return map[status] || {t:status, c:'text-slate-600 bg-slate-50'};
 }
 
-// ============================================
-// PERMISSÕES - verificar se pode ver dados completos
-// ============================================
 function podeVerDadosCompletos() {
     return usuarioLogado && (usuarioLogado.tipo === 'admin' || usuarioLogado.tipo === 'admin_apac');
 }
@@ -975,7 +1231,7 @@ function podeGerarRelatorioAPAC() {
 }
 
 // ============================================
-// TOGGLE CAIXA DE FERRAMENTAS
+// TOGGLE FUNCTIONS
 // ============================================
 function toggleFerramentas() {
     const sub = document.getElementById('ferramentasSub');
@@ -996,9 +1252,6 @@ function toggleExportMenu() {
     }
 }
 
-// ============================================
-// SWITCH TABS
-// ============================================
 function switchTab(tabId) {
     document.querySelectorAll('.tab-btn').forEach(b => {
         b.classList.remove('active', 'text-blue-600');
@@ -1025,13 +1278,9 @@ function switchTab(tabId) {
 }
 
 // ============================================
-// FUNÇÕES ADMIN
+// FUNÇÕES ADMIN (resumidas para espaço)
 // ============================================
-function abrirModalAdmin() {
-    document.getElementById('modalAdmin').classList.add('show');
-    switchAdminTab('usuarios');
-    renderizarListaUsuarios();
-}
+function abrirModalAdmin() { document.getElementById('modalAdmin').classList.add('show'); switchAdminTab('usuarios'); renderizarListaUsuarios(); }
 
 function switchAdminTab(tabId) {
     document.querySelectorAll('.admin-tab-btn').forEach(b => {
@@ -1049,64 +1298,31 @@ function switchAdminTab(tabId) {
 function toggleUbsField() {
     const tipo = document.getElementById('adminNovoTipo')?.value;
     const ubsDiv = document.getElementById('adminNovoUbsDiv');
-    if (ubsDiv) {
-        ubsDiv.style.display = tipo === 'usuario' ? 'block' : 'none';
-    }
+    if (ubsDiv) ubsDiv.style.display = tipo === 'usuario' ? 'block' : 'none';
 }
 
 function toggleEditUbsField() {
     const tipo = document.getElementById('editUsuarioTipo')?.value;
     const ubsDiv = document.getElementById('editUsuarioUbsDiv');
-    if (ubsDiv) {
-        ubsDiv.style.display = tipo === 'usuario' ? 'block' : 'none';
-    }
+    if (ubsDiv) ubsDiv.style.display = tipo === 'usuario' ? 'block' : 'none';
 }
 
 function carregarUBSnoSelect(selectId) {
     const select = document.getElementById(selectId);
     if (!select) return;
-    select.innerHTML = '<option value="">Selecione a UBS</option>' + 
-        LISTA_UBS.map(u => `<option value="${u.replace(/'/g, "\\'")}">${u}</option>`).join('');
+    select.innerHTML = '<option value="">Selecione a UBS</option>' + LISTA_UBS.map(u => `<option value="${u.replace(/'/g, "\\'")}">${u}</option>`).join('');
 }
 
-function preencherCPF(cpf) {
-    const el = document.getElementById('adminNovoCPF');
-    if (el) el.value = cpf;
-}
+function preencherCPF(cpf) { const el = document.getElementById('adminNovoCPF'); if (el) el.value = cpf; }
+function gerarCPFAdmin() { const el = document.getElementById('adminNovoCPF'); if (el) { let c=''; for(let i=0;i<9;i++) c+=Math.floor(Math.random()*9); let d1=0; for(let i=0;i<9;i++) d1+=parseInt(c[i])*(10-i); d1=(d1*10)%11; if(d1===10)d1=0; c+=d1; let d2=0; for(let i=0;i<10;i++) d2+=parseInt(c[i])*(11-i); d2=(d2*10)%11; if(d2===10)d2=0; c+=d2; el.value=c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4'); } }
 
-function gerarCPFAdmin() {
-    const el = document.getElementById('adminNovoCPF');
-    if (el) {
-        let cpf = '';
-        for (let i=0; i<9; i++) cpf += Math.floor(Math.random() * 9);
-        let d1 = 0;
-        for (let i=0; i<9; i++) d1 += parseInt(cpf[i]) * (10 - i);
-        d1 = (d1 * 10) % 11;
-        if (d1 === 10) d1 = 0;
-        cpf += d1;
-        let d2 = 0;
-        for (let i=0; i<10; i++) d2 += parseInt(cpf[i]) * (11 - i);
-        d2 = (d2 * 10) % 11;
-        if (d2 === 10) d2 = 0;
-        cpf += d2;
-        el.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-    }
-}
-
-// ============================================
-// LISTAR USUÁRIOS (RPC)
-// ============================================
 async function renderizarListaUsuarios() {
     if (!supabaseClient) return;
     showLoading();
     try {
         const { data: usuarios, error } = await supabaseClient.rpc('listar_usuarios_seguro');
         hideLoading();
-        if (error) {
-            console.error('Erro ao buscar usuários:', error);
-            alert('❌ Erro ao carregar lista de usuários: ' + error.message);
-            return;
-        }
+        if (error) return alert('❌ Erro ao carregar usuários: ' + error.message);
         const busca = (document.getElementById('adminBuscaUsuario')?.value || '').toLowerCase();
         let lista = (usuarios || []).filter(u => !busca || u.nome.toLowerCase().includes(busca) || (u.cpf || '').includes(busca));
         const tbody = document.getElementById('adminTabelaUsuarios');
@@ -1118,28 +1334,13 @@ async function renderizarListaUsuarios() {
                 <td class="px-3 py-2 text-sm">${u.email || '—'}</td>
                 <td class="px-3 py-2 text-sm">${u.unidade_saude || '—'}</td>
                 <td class="px-3 py-2"><span class="px-2 py-1 rounded-full text-xs font-bold ${u.tipo === 'admin' ? 'bg-purple-100 text-purple-600' : u.tipo === 'admin_apac' ? 'bg-indigo-100 text-indigo-600' : 'bg-blue-100 text-blue-600'}">${u.tipo === 'admin' ? '👑 Admin' : u.tipo === 'admin_apac' ? '📑 Admin APAC' : '👤 Usuário'}</span></td>
-                <td class="px-3 py-2">
-                    <div class="flex gap-2">
-                        <button onclick='editarUsuario(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="text-blue-600 hover:text-blue-800 text-xs font-bold" title="Editar usuário">✏️</button>
-                        <button onclick='excluirUsuario(${u.id})' class="text-rose-600 hover:text-rose-800 text-xs font-bold" title="Excluir usuário">🗑️</button>
-                        <button onclick='gerarTokenRedefinicao("${u.cpf}")' class="text-amber-600 hover:text-amber-800 text-xs font-bold" title="Gerar código de redefinição">🔑</button>
-                    </div>
-                </td>
+                <td class="px-3 py-2"><div class="flex gap-2"><button onclick='editarUsuario(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="text-blue-600 hover:text-blue-800 text-xs font-bold">✏️</button><button onclick='excluirUsuario(${u.id})' class="text-rose-600 hover:text-rose-800 text-xs font-bold">🗑️</button><button onclick='gerarTokenRedefinicao("${u.cpf}")' class="text-amber-600 hover:text-amber-800 text-xs font-bold">🔑</button></div></td>
             </tr>
         `).join('');
-        if (!lista.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400 font-bold">Nenhum usuário encontrado</td></tr>';
-        }
-    } catch (err) {
-        hideLoading();
-        console.error('Erro inesperado:', err);
-        alert('❌ Erro ao carregar lista de usuários. Tente novamente.');
-    }
+        if (!lista.length) tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400 font-bold">Nenhum usuário encontrado</td></tr>';
+    } catch (err) { hideLoading(); alert('❌ Erro ao carregar lista de usuários.'); }
 }
 
-// ============================================
-// CADASTRAR USUÁRIO (RPC)
-// ============================================
 async function cadastrarUsuarioAdmin() {
     const nome = document.getElementById('adminNovoNome')?.value?.trim();
     const cpf = limparCPF(document.getElementById('adminNovoCPF')?.value || '');
@@ -1148,27 +1349,15 @@ async function cadastrarUsuarioAdmin() {
     const senha = document.getElementById('adminNovoSenha')?.value?.trim();
     const tipo = document.getElementById('adminNovoTipo')?.value || 'usuario';
     const unidadeSaude = tipo === 'usuario' ? document.getElementById('adminNovoUbs')?.value : null;
-    
     if (!nome || !cpf || !email || !senha) return alert('⚠️ Preencha todos os campos!');
     if (!validarCPF(cpf)) return alert('❌ CPF inválido!');
     if (senha.length !== 6) return alert('⚠️ Senha deve ter 6 dígitos!');
     if (!email.includes('@') || !email.includes('.')) return alert('❌ E-mail inválido!');
     if (tipo === 'usuario' && !unidadeSaude) return alert('❌ Selecione a UBS para usuário comum!');
-    
     showLoading();
-    const { data, error } = await supabaseClient.rpc('cadastrar_usuario_painel', {
-        p_nome: nome,
-        p_cpf: cpf,
-        p_email: email,
-        p_telefone: telefone,
-        p_unidade_saude: unidadeSaude,
-        p_senha: senha,
-        p_tipo: tipo
-    });
+    const { data, error } = await supabaseClient.rpc('cadastrar_usuario_painel', { p_nome: nome, p_cpf: cpf, p_email: email, p_telefone: telefone, p_unidade_saude: unidadeSaude, p_senha: senha, p_tipo: tipo });
     hideLoading();
-    if (error || !data?.success) {
-        return alert('❌ Erro: ' + (data?.message || error?.message));
-    }
+    if (error || !data?.success) return alert('❌ Erro: ' + (data?.message || error?.message));
     alert('✅ Usuário cadastrado com sucesso!');
     document.getElementById('adminNovoNome').value = '';
     document.getElementById('adminNovoCPF').value = '';
@@ -1180,9 +1369,6 @@ async function cadastrarUsuarioAdmin() {
     renderizarListaUsuarios();
 }
 
-// ============================================
-// EDITAR USUÁRIO
-// ============================================
 function editarUsuario(u) {
     document.getElementById('editUsuarioId').value = u.id;
     document.getElementById('editUsuarioNome').value = u.nome;
@@ -1207,10 +1393,8 @@ async function salvarEdicaoUsuario() {
     const tipo = document.getElementById('editUsuarioTipo').value;
     const unidadeSaude = tipo === 'usuario' ? document.getElementById('editUsuarioUbs')?.value : null;
     const novaSenha = document.getElementById('editUsuarioSenha').value.trim();
-    
     const updateData = { nome, email, telefone, tipo, unidade_saude: unidadeSaude };
     if (novaSenha && novaSenha.length === 6) updateData.senha_hash = novaSenha;
-    
     showLoading();
     const { error } = await supabaseClient.from('usuarios').update(updateData).eq('id', id);
     hideLoading();
@@ -1230,43 +1414,24 @@ async function excluirUsuario(id) {
     renderizarListaUsuarios();
 }
 
-// ============================================
-// GERAR CÓDIGO DE REDEFINIÇÃO
-// ============================================
 async function gerarTokenRedefinicao(cpf) {
-    if (!cpf) { alert('❌ CPF não informado!'); return; }
+    if (!cpf) return alert('❌ CPF não informado!');
     showLoading();
     try {
         const { data, error } = await supabaseClient.rpc('gerar_codigo_redefinicao_admin_oci', { p_cpf: cpf });
         hideLoading();
-        if (error || !data?.success) {
-            alert('❌ ' + (data?.message || error?.message || 'Erro ao gerar código'));
-            return;
-        }
-        alert(`🔑 CÓDIGO GERADO!\n\nCPF: ${formatarCPF(cpf)}\nCÓDIGO: ${data.codigo}\n\n⏰ Válido por 1 hora\n\n📌 INFORME ESTE CÓDIGO AO USUÁRIO para ele redefinir a senha.`);
-    } catch (err) {
-        hideLoading();
-        alert('❌ Erro inesperado ao gerar código.');
-    }
+        if (error || !data?.success) return alert('❌ ' + (data?.message || error?.message));
+        alert(`🔑 CÓDIGO GERADO!\n\nCPF: ${formatarCPF(cpf)}\nCÓDIGO: ${data.codigo}\n\n⏰ Válido por 1 hora`);
+    } catch (err) { hideLoading(); alert('❌ Erro ao gerar código.'); }
 }
 
-// ============================================
-// LOGS DE AUDITORIA
-// ============================================
 async function renderizarLogs() {
     if (!supabaseClient || !podeVerDadosCompletos()) return;
     showLoading();
     try {
-        const { data: logs, error } = await supabaseClient
-            .from('logs_auditoria')
-            .select('*')
-            .order('data_hora', { ascending: false })
-            .limit(100);
+        const { data: logs, error } = await supabaseClient.from('logs_auditoria').select('*').order('data_hora', { ascending: false }).limit(100);
         hideLoading();
-        if (error) {
-            console.error('Erro ao buscar logs:', error);
-            return;
-        }
+        if (error) return;
         const busca = (document.getElementById('adminBuscaLogs')?.value || '').toLowerCase();
         let lista = (logs || []).filter(l => !busca || l.acao.toLowerCase().includes(busca) || (l.usuario_nome || '').toLowerCase().includes(busca));
         const tbody = document.getElementById('adminTabelaLogs');
@@ -1279,34 +1444,17 @@ async function renderizarLogs() {
                 <td class="px-3 py-2 text-xs">${l.descricao || '—'}</td>
             </tr>
         `).join('');
-        if (!lista.length) {
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 font-bold">Nenhum log encontrado</td></tr>';
-        }
-    } catch (err) {
-        hideLoading();
-        console.error('Erro ao carregar logs:', err);
-    }
+        if (!lista.length) tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 font-bold">Nenhum log encontrado</td></tr>';
+    } catch (err) { hideLoading(); }
 }
 
-// ============================================
-// MODAL RELATÓRIO APAC
-// ============================================
 function abrirModalRelatorioAPAC() {
-    if (!podeGerarRelatorioAPAC()) {
-        alert('❌ Apenas Administradores e Admin APAC podem gerar relatórios APAC.');
-        return;
-    }
+    if (!podeGerarRelatorioAPAC()) return alert('❌ Apenas Administradores e Admin APAC podem gerar relatórios APAC.');
     document.getElementById('modalRelatorioAPAC').classList.add('show');
-    // Preencher filtros
     const espSelect = document.getElementById('apacEspecialidade');
-    if (espSelect) {
-        espSelect.innerHTML = '<option value="">Todas</option>' + especialidades.map(e => `<option value="${e.id}">${e.icone} ${e.nome}</option>`).join('');
-    }
+    if (espSelect) espSelect.innerHTML = '<option value="">Todas</option>' + especialidades.map(e => `<option value="${e.id}">${e.icone} ${e.nome}</option>`).join('');
     const ubsSelect = document.getElementById('apacUBS');
-    if (ubsSelect) {
-        ubsSelect.innerHTML = '<option value="">Todas</option>' + LISTA_UBS.map(u => `<option value="${u}">${u}</option>`).join('');
-    }
-    // Datas padrão: último mês
+    if (ubsSelect) ubsSelect.innerHTML = '<option value="">Todas</option>' + LISTA_UBS.map(u => `<option value="${u}">${u}</option>`).join('');
     const hoje = new Date();
     const inicio = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
     document.getElementById('apacDataInicio').value = inicio.toISOString().split('T')[0];
@@ -1314,55 +1462,24 @@ function abrirModalRelatorioAPAC() {
     document.getElementById('apacStatus').classList.add('hidden');
 }
 
-// ============================================
-// GERAR RELATÓRIO APAC
-// ============================================
 async function gerarRelatorioAPAC(formato) {
-    if (!podeGerarRelatorioAPAC()) {
-        alert('❌ Apenas Administradores e Admin APAC podem gerar relatórios APAC.');
-        return;
-    }
-    
+    if (!podeGerarRelatorioAPAC()) return alert('❌ Apenas Administradores e Admin APAC podem gerar relatórios APAC.');
     const dataInicio = document.getElementById('apacDataInicio').value;
     const dataFim = document.getElementById('apacDataFim').value;
     const especialidade = document.getElementById('apacEspecialidade').value;
     const ubs = document.getElementById('apacUBS').value;
-    
-    if (!dataInicio || !dataFim) {
-        alert('❌ Selecione o período!');
-        return;
-    }
-    
+    if (!dataInicio || !dataFim) return alert('❌ Selecione o período!');
     showLoading();
     const statusEl = document.getElementById('apacStatus');
     statusEl.classList.remove('hidden');
     statusEl.innerHTML = '<p class="text-sm text-blue-600 font-bold">⏳ Gerando relatório... Aguarde.</p>';
-    
     try {
-        // Buscar dados
-        let query = supabaseClient
-            .from('linha_cuidado')
-            .select('*, pacientes(*)')
-            .in('status', ['oci_fechada', 'apac_gerada'])
-            .gte('data_fechamento', dataInicio)
-            .lte('data_fechamento', dataFim);
-        
+        let query = supabaseClient.from('linha_cuidado').select('*, pacientes(*)').in('status', ['oci_fechada', 'apac_gerada']).gte('data_fechamento', dataInicio).lte('data_fechamento', dataFim);
         if (especialidade) query = query.eq('especialidade_id', parseInt(especialidade));
         if (ubs) query = query.eq('unidade_basica_saude', ubs);
-        
         const { data: resultados, error } = await query;
-        
-        if (error) {
-            throw new Error(error.message);
-        }
-        
-        if (!resultados || resultados.length === 0) {
-            statusEl.innerHTML = '<p class="text-sm text-amber-600 font-bold">⚠️ Nenhum registro encontrado para os filtros selecionados.</p>';
-            hideLoading();
-            return;
-        }
-        
-        // Montar dados para exportação (completos, sem mascaramento)
+        if (error) throw new Error(error.message);
+        if (!resultados || resultados.length === 0) { statusEl.innerHTML = '<p class="text-sm text-amber-600 font-bold">⚠️ Nenhum registro encontrado.</p>'; hideLoading(); return; }
         const exportData = resultados.map(item => {
             const p = item.pacientes || {};
             const e = especialidades.find(x => x.id === item.especialidade_id) || {};
@@ -1399,36 +1516,19 @@ async function gerarRelatorioAPAC(formato) {
                 'Cadastrado por': item.usuario_cadastrou || ''
             };
         });
-        
-        // Gerar arquivo
         const ws = XLSX.utils.json_to_sheet(exportData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'APAC');
         const arquivo = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        
-        // Registrar log de auditoria
-        await supabaseClient.rpc('registrar_log_auditoria', {
-            p_usuario_id: usuarioLogado.id,
-            p_usuario_nome: usuarioLogado.nome,
-            p_acao: 'DOWNLOAD_RELATORIO_APAC',
-            p_descricao: `Período: ${dataInicio} a ${dataFim} | Especialidade: ${especialidade || 'Todas'} | UBS: ${ubs || 'Todas'} | ${exportData.length} registros`,
-            p_ip_origem: ''
-        });
-        
-        // Baixar arquivo
+        await supabaseClient.rpc('registrar_log_auditoria', { p_usuario_id: usuarioLogado.id, p_usuario_nome: usuarioLogado.nome, p_acao: 'DOWNLOAD_RELATORIO_APAC', p_descricao: `Período: ${dataInicio} a ${dataFim} | ${exportData.length} registros`, p_ip_origem: '' });
         const blob = new Blob([arquivo], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = `relatorio_apac_${dataInicio}_a_${dataFim}.xlsx`;
         link.click();
         URL.revokeObjectURL(link.href);
-        
-        statusEl.innerHTML = `<p class="text-sm text-emerald-600 font-bold">✅ Relatório gerado com ${exportData.length} registros! Log de auditoria registrado.</p>`;
-        
-    } catch (err) {
-        console.error('Erro ao gerar relatório:', err);
-        statusEl.innerHTML = `<p class="text-sm text-rose-600 font-bold">❌ Erro: ${err.message}</p>`;
-    }
+        statusEl.innerHTML = `<p class="text-sm text-emerald-600 font-bold">✅ Relatório gerado com ${exportData.length} registros! Log registrado.</p>`;
+    } catch (err) { statusEl.innerHTML = `<p class="text-sm text-rose-600 font-bold">❌ Erro: ${err.message}</p>`; }
     hideLoading();
 }
 
@@ -1438,74 +1538,39 @@ async function gerarRelatorioAPAC(formato) {
 async function carregarDadosSupabase() {
     if (!supabaseClient) return;
     try {
-        // Buscar pacientes
         const { data: pacientesDB } = await supabaseClient.from('pacientes').select('*');
-        if (pacientesDB && pacientesDB.length > 0) {
-            pacientes.length = 0;
-            pacientesDB.forEach(p => pacientes.push(p));
-            console.log('📥 Pacientes carregados:', pacientes.length);
-        }
-
-        // Buscar linha do cuidado
+        if (pacientesDB && pacientesDB.length > 0) { pacientes.length = 0; pacientesDB.forEach(p => pacientes.push(p)); }
         let query = supabaseClient.from('linha_cuidado').select('*').order('created_at', { ascending: false });
-        
         if (usuarioLogado && usuarioLogado.tipo !== 'admin' && usuarioLogado.tipo !== 'admin_apac' && usuarioLogado.unidade_saude) {
-            query = supabaseClient.from('linha_cuidado')
-                .select('*')
-                .eq('unidade_basica_saude', usuarioLogado.unidade_saude)
-                .order('created_at', { ascending: false });
-            console.log('🔍 Usuário comum - Filtrando por UBS:', usuarioLogado.unidade_saude);
+            query = supabaseClient.from('linha_cuidado').select('*').eq('unidade_basica_saude', usuarioLogado.unidade_saude).order('created_at', { ascending: false });
         }
-        
         const { data: linhaDB } = await query;
-        
         if (linhaDB && linhaDB.length > 0) {
             consultas.length = 0;
             linhaDB.forEach(l => {
                 consultas.push({
-                    id: l.id,
-                    paciente_id: l.paciente_id,
-                    especialidade_id: l.especialidade_id,
-                    numero_solicitacao: l.numero_solicitacao,
-                    numero_solicitacao_retorno: l.numero_solicitacao_retorno,
-                    tipo_servico: l.tipo_servico || 'P',
-                    status: l.status || 'agendada',
-                    data_agendada: l.data_agendada,
-                    data_recepcionada: l.data_recepcionada,
-                    data_retorno_agendada: l.data_retorno_agendada,
-                    data_retorno_recepcionada: l.data_retorno_recepcionada,
-                    data_fechamento: l.data_fechamento,
-                    data_apac: l.data_apac,
-                    data_solicitacao_apac: l.data_solicitacao_apac,
-                    data_emissao_apac: l.data_emissao_apac,
-                    usuario_gerou_apac: l.usuario_gerou_apac,
-                    usuario_importou_apac: l.usuario_importou_apac,
+                    id: l.id, paciente_id: l.paciente_id, especialidade_id: l.especialidade_id,
+                    numero_solicitacao: l.numero_solicitacao, numero_solicitacao_retorno: l.numero_solicitacao_retorno,
+                    tipo_servico: l.tipo_servico || 'P', status: l.status || 'agendada',
+                    data_agendada: l.data_agendada, data_recepcionada: l.data_recepcionada,
+                    data_retorno_agendada: l.data_retorno_agendada, data_retorno_recepcionada: l.data_retorno_recepcionada,
+                    data_fechamento: l.data_fechamento, data_apac: l.data_apac,
+                    data_solicitacao_apac: l.data_solicitacao_apac, data_emissao_apac: l.data_emissao_apac,
+                    usuario_gerou_apac: l.usuario_gerou_apac, usuario_importou_apac: l.usuario_importou_apac,
                     data_importacao_apac: l.data_importacao_apac,
-                    medico_solicitante: l.medico_solicitante,
-                    medico_retorno: l.medico_retorno,
-                    local_consulta: l.local_consulta,
-                    local_retorno: l.local_retorno,
-                    unidade_basica_saude: l.unidade_basica_saude,
-                    codigo_unidade_executante: l.codigo_unidade_executante,
-                    operador_agendamento: l.operador_agendamento,
-                    data_criacao_agendamento: l.data_criacao_agendamento,
-                    codigo_sigtap: l.codigo_sigtap,
-                    subgrupo_sigtap: l.subgrupo_sigtap,
-                    exames_solicitados: l.exames_solicitados,
-                    exames_realizados: l.exames_realizados,
-                    data_solicitacao_exame: l.data_solicitacao_exame,
-                    data_realizacao_exame: l.data_realizacao_exame,
-                    cid: l.cid,
-                    numero_apac: l.numero_apac,
-                    usuario_cadastrou: l.usuario_cadastrou,
+                    medico_solicitante: l.medico_solicitante, medico_retorno: l.medico_retorno,
+                    local_consulta: l.local_consulta, local_retorno: l.local_retorno,
+                    unidade_basica_saude: l.unidade_basica_saude, codigo_unidade_executante: l.codigo_unidade_executante,
+                    operador_agendamento: l.operador_agendamento, data_criacao_agendamento: l.data_criacao_agendamento,
+                    codigo_sigtap: l.codigo_sigtap, subgrupo_sigtap: l.subgrupo_sigtap,
+                    exames_solicitados: l.exames_solicitados, exames_realizados: l.exames_realizados,
+                    data_solicitacao_exame: l.data_solicitacao_exame, data_realizacao_exame: l.data_realizacao_exame,
+                    cid: l.cid, numero_apac: l.numero_apac, usuario_cadastrou: l.usuario_cadastrou,
                     created_at: l.created_at
                 });
             });
-            console.log('📥 Linha do Cuidado carregada:', consultas.length, 'registros');
         }
-    } catch(e) {
-        console.warn('⚠️ Erro ao carregar Supabase:', e.message);
-    }
+    } catch(e) { console.warn('⚠️ Erro ao carregar Supabase:', e.message); }
 }
 
 // ============================================
@@ -1513,16 +1578,12 @@ async function carregarDadosSupabase() {
 // ============================================
 async function atualizarTudo() {
     await carregarDadosSupabase();
-
     const fe = document.getElementById('filtroVisaoEspecialidade')?.value;
     const fp = parseInt(document.getElementById('filtroVisaoPeriodo')?.value || 365);
-    const dl = new Date();
-    dl.setDate(dl.getDate() - fp);
-
+    const dl = new Date(); dl.setDate(dl.getDate() - fp);
     let cf = [...consultas];
     if (fe) cf = cf.filter(c => c.especialidade_id == fe);
     cf = cf.filter(c => c.data_agendada && new Date(c.data_agendada + 'T12:00:00') >= dl);
-
     const emAndamento = cf.filter(c => c.status === 'recepcionada').length;
     const aguardandoExame = cf.filter(c => c.status === 'aguardando_exame').length;
     const aptosRetorno = cf.filter(c => c.status === 'apto_retorno').length;
@@ -1536,22 +1597,17 @@ async function atualizarTudo() {
     const transferidas = cf.filter(c => c.status === 'transferida').length;
     const totalOCI = emAndamento + aguardandoExame + aptosRetorno + retornoAgendado + retornoRecepcionado + ociFechada + apacsGeradasCount;
     const pct = totalOCI > 0 ? Math.round(((ociFechada + apacsGeradasCount) / totalOCI) * 100) : 0;
-
     if (usuarioLogado) {
         document.getElementById('sidebarNome').textContent = usuarioLogado.nome || 'Usuário';
         document.getElementById('sidebarAvatar').textContent = (usuarioLogado.nome || 'U')[0].toUpperCase();
-        const tipoLabel = usuarioLogado.tipo === 'admin' ? '👑 Administrador' : 
-                         usuarioLogado.tipo === 'admin_apac' ? '📑 Admin APAC' : '👤 Usuário';
+        const tipoLabel = usuarioLogado.tipo === 'admin' ? '👑 Administrador' : usuarioLogado.tipo === 'admin_apac' ? '📑 Admin APAC' : '👤 Usuário';
         document.getElementById('sidebarTipo').textContent = tipoLabel;
         document.getElementById('sidebarUBS').textContent = usuarioLogado.unidade_saude || '';
-        
         const adminSection = document.getElementById('sidebarAdminSection');
         if (adminSection) adminSection.classList.toggle('hidden', usuarioLogado.tipo !== 'admin');
-        
         const apacSection = document.getElementById('sidebarAPACSection');
         if (apacSection) apacSection.classList.toggle('hidden', !podeGerarRelatorioAPAC());
     }
-
     const statsGrid = document.getElementById('statsGrid');
     if (statsGrid) {
         statsGrid.innerHTML = `
@@ -1565,7 +1621,6 @@ async function atualizarTudo() {
             <div class="bg-white p-5 rounded-2xl shadow-sm" style="border-left:5px solid #64748b"><p class="text-slate-500 text-xs font-bold uppercase">Canceladas/Transf.</p><h3 class="text-2xl font-extrabold mt-1">${canceladas + transferidas}</h3></div>
         `;
     }
-
     const linhaProducao = document.getElementById('linhaProducao');
     if (linhaProducao) {
         linhaProducao.innerHTML = `
@@ -1577,17 +1632,13 @@ async function atualizarTudo() {
             <div class="linha-producao-step bg-purple-100 text-purple-700">📑 APAC: <b>${apacsGeradasCount}</b></div>
         `;
     }
-
     const feEl = document.getElementById('filtroEspecialidadeMonitoramento');
     if (feEl) feEl.innerHTML = '<option value="">Todas</option>' + especialidades.map(e => `<option value="${e.id}">${e.icone} ${e.nome}</option>`).join('');
-
     const fve = document.getElementById('filtroVisaoEspecialidade');
     if (fve) fve.innerHTML = '<option value="">Todas Especialidades</option>' + especialidades.map(e => `<option value="${e.id}">${e.icone} ${e.nome}</option>`).join('');
-
     document.getElementById('indTaxaComparecimento').textContent = pct + '%';
     document.getElementById('indTempoMedio').textContent = '14 dias';
     document.getElementById('indRetornosRealizados').textContent = retornoRecepcionado;
-
     const ocisPendentes = cf.filter(c => {
         if (['oci_fechada','apac_gerada','faltou','retorno_faltou','cancelada','transferida'].includes(c.status)) return false;
         if (!c.data_agendada) return false;
@@ -1596,13 +1647,15 @@ async function atualizarTudo() {
         return dias > prazo;
     });
     document.getElementById('alertCount').textContent = ocisPendentes.length;
-
+    document.getElementById('alertOcisPendentes').textContent = ocisPendentes.length;
+    const examesAtraso = consultas.filter(c => c.status === 'aguardando_exame' && c.data_solicitacao_exame).length;
+    document.getElementById('alertExamesAtraso').textContent = examesAtraso;
     renderizarTabelas();
     renderizarGraficos();
 }
 
 // ============================================
-// FUNÇÕES DE TABELA (SIMPLIFICADAS)
+// FUNÇÕES DE TABELA
 // ============================================
 function getDadosFiltrados(tipo) {
     let dados = [];
@@ -1616,11 +1669,9 @@ function getDadosFiltrados(tipo) {
                     if (Array.isArray(exames)) {
                         exames.forEach(ex => {
                             dados.push({
-                                id: c.id,
-                                numero_solicitacao: c.numero_solicitacao,
-                                paciente_id: c.paciente_id,
-                                especialidade_id: c.especialidade_id,
-                                nome_exame: ex.nome || '—',
+                                id: c.id, numero_solicitacao: c.numero_solicitacao,
+                                paciente_id: c.paciente_id, especialidade_id: c.especialidade_id,
+                                nome_exame: ex.nome || '—', subgrupo_sigtap: c.subgrupo_sigtap,
                                 data_solicitacao_exame: ex.data_solicitacao || c.data_solicitacao_exame,
                                 data_realizacao_exame: ex.data_realizacao || c.data_realizacao_exame,
                                 status_exame: ex.data_realizacao ? 'Realizado' : 'Pendente'
@@ -1657,7 +1708,6 @@ function getDadosFiltrados(tipo) {
         if (di) dados = dados.filter(c => c.data_apac && c.data_apac >= di);
         if (df) dados = dados.filter(c => c.data_apac && c.data_apac <= df);
     }
-
     const buscaMap = {
         'monitoramento':'buscaMonitoramento','monitoramento-exames':'buscaMonitoramentoExames',
         'primeira-consulta-agendadas':'buscaPrimeiraConsultaAgendadas','primeira-consulta':'buscaPrimeiraConsulta',
@@ -1675,23 +1725,18 @@ function getDadosFiltrados(tipo) {
                    (p.nome || '').toLowerCase().includes(busca);
         });
     }
-
     if (tipo === 'monitoramento') {
         const fe = document.getElementById('filtroEspecialidadeMonitoramento')?.value;
         const fs = document.getElementById('filtroStatusMonitoramento')?.value;
         if (fe) dados = dados.filter(c => c.especialidade_id == parseInt(fe));
         if (fs) dados = dados.filter(c => c.status === fs);
     }
-
     return dados;
 }
 
 function ordenarTabela(tipo, campo) {
-    if (ordenacaoAtual[tipo] === campo) {
-        ordenacaoAtual[tipo] = '-' + campo;
-    } else {
-        ordenacaoAtual[tipo] = campo;
-    }
+    if (ordenacaoAtual[tipo] === campo) ordenacaoAtual[tipo] = '-' + campo;
+    else ordenacaoAtual[tipo] = campo;
     paginaAtual[tipo] = 1;
     renderizarTabelas();
 }
@@ -1705,45 +1750,25 @@ function mudarPagina(tipo) {
         'absenteismo-retorno': 'paginaAbsenteismoRetorno', 'apac': 'paginaAPAC', 'apacs-geradas': 'paginaAPACSGeradas'
     };
     const selectEl = document.getElementById(selectMap[tipo]);
-    if (selectEl) {
-        itensPorPagina[tipo] = parseInt(selectEl.value);
-        paginaAtual[tipo] = 1;
-        renderizarTabelas();
-    }
+    if (selectEl) { itensPorPagina[tipo] = parseInt(selectEl.value); paginaAtual[tipo] = 1; renderizarTabelas(); }
 }
 
-function filtrarTabela(tipo) {
-    paginaAtual[tipo] = 1;
-    renderizarTabelas();
-}
-
-function limparFiltroAPAC() {
-    document.getElementById('filtroDataInicioAPAC').value = '';
-    document.getElementById('filtroDataFimAPAC').value = '';
-    filtrarTabela('apac');
-}
-
-function limparFiltroAPACS() {
-    document.getElementById('filtroDataInicioAPACS').value = '';
-    document.getElementById('filtroDataFimAPACS').value = '';
-    filtrarTabela('apacs-geradas');
-}
+function filtrarTabela(tipo) { paginaAtual[tipo] = 1; renderizarTabelas(); }
+function limparFiltroAPAC() { document.getElementById('filtroDataInicioAPAC').value = ''; document.getElementById('filtroDataFimAPAC').value = ''; filtrarTabela('apac'); }
+function limparFiltroAPACS() { document.getElementById('filtroDataInicioAPACS').value = ''; document.getElementById('filtroDataFimAPACS').value = ''; filtrarTabela('apacs-geradas'); }
 
 // ============================================
 // RENDERIZAR TABELAS
 // ============================================
 function renderizarTabelas() {
     const tiposTabela = ['monitoramento','monitoramento-exames','primeira-consulta-agendadas','primeira-consulta','aptos-retorno','retornos-agendados','retornos-recepcionados','absenteismo-1consulta','absenteismo-retorno','apac','apacs-geradas'];
-    
     const podeCompleto = podeVerDadosCompletos();
-
     tiposTabela.forEach(tipo => {
         const dados = getDadosFiltrados(tipo);
         const totalPag = Math.ceil(dados.length / itensPorPagina[tipo]) || 1;
         if (paginaAtual[tipo] > totalPag) paginaAtual[tipo] = totalPag;
         const inicio = (paginaAtual[tipo] - 1) * itensPorPagina[tipo];
         const pag = dados.slice(inicio, inicio + itensPorPagina[tipo]);
-
         const tid = {
             'monitoramento': 'tabelaMonitoramento', 'monitoramento-exames': 'tabelaMonitoramentoExames',
             'primeira-consulta-agendadas': 'tabelaPrimeiraConsultaAgendadas', 'primeira-consulta': 'tabelaPrimeiraConsulta',
@@ -1758,11 +1783,9 @@ function renderizarTabelas() {
             'retornos-recepcionados': 'paginacaoRetornosRecepcionados', 'absenteismo-1consulta': 'paginacaoAbsenteismo1Consulta',
             'absenteismo-retorno': 'paginacaoAbsenteismoRetorno', 'apac': 'paginacaoAPAC', 'apacs-geradas': 'paginacaoAPACSGeradas'
         };
-
         const tabelaEl = document.getElementById(tid[tipo]);
         const pagEl = document.getElementById(pid[tipo]);
         if (!tabelaEl || !pagEl) return;
-
         if (pag.length === 0) {
             tabelaEl.innerHTML = '<tr><td colspan="20" class="text-center py-8 text-slate-400 font-bold">Nenhum registro encontrado</td></tr>';
         } else {
@@ -1770,24 +1793,60 @@ function renderizarTabelas() {
                 const p = pacientes.find(x => x.id === item.paciente_id) || {};
                 const e = especialidades.find(x => x.id === item.especialidade_id) || {};
                 const st = getStatusBadge(item.status);
-                
-                // MASCARAMENTO
                 const nomeExibido = podeCompleto ? (p.nome || '—') : mascararNome(p.nome);
                 const cpfExibido = podeCompleto ? formatarCPF(p.cpf) : mascararCPF(p.cpf);
                 const telefoneExibido = podeCompleto ? (p.telefone || '—') : mascararTelefone(p.telefone);
+                
+                // Timeline para monitoramento
+                let timeline = '';
+                if (tipo === 'monitoramento') {
+                    const steps = ['agendada','recepcionada','aguardando_exame','apto_retorno','retorno_agendado','retorno_recepcionado','oci_fechada','apac_gerada'];
+                    const idx = steps.indexOf(item.status);
+                    timeline = steps.map((s, i) => {
+                        let cls = 'pending';
+                        if (i < idx) cls = 'done';
+                        else if (i === idx) cls = 'active';
+                        return `<span class="timeline-step ${cls}">${i+1}</span>`;
+                    }).join('');
+                }
+                
+                const diasRest = item.data_agendada ? (() => {
+                    const hoje = new Date();
+                    const diasPassados = Math.floor((hoje - new Date(item.data_agendada + 'T12:00:00')) / 86400000);
+                    const prazo = e.prazo_retorno_dias || 60;
+                    const rest = prazo - diasPassados;
+                    if (['oci_fechada','apac_gerada','faltou','retorno_faltou','cancelada','transferida'].includes(item.status)) return {dias:'—', cor:'text-slate-400'};
+                    if (rest < 0) return {dias:`Vencido ${Math.abs(rest)}d`, cor:'text-rose-600 font-bold'};
+                    if (rest <= 10) return {dias:`${rest} dias`, cor:'text-amber-600 font-bold'};
+                    return {dias:`${rest} dias`, cor:'text-emerald-600'};
+                })() : {dias:'—', cor:'text-slate-400'};
+                
+                const alerta = (() => {
+                    if (['oci_fechada','apac_gerada','faltou','retorno_faltou','cancelada','transferida'].includes(item.status)) return {tipo:'', cor:'', texto:'—'};
+                    if (!item.data_agendada) return {tipo:'🟡', cor:'bg-amber-100 text-amber-700', texto:'Sem data'};
+                    const dias = Math.floor((new Date() - new Date(item.data_agendada + 'T12:00:00')) / 86400000);
+                    const prazo = e.prazo_retorno_dias || 60;
+                    if (dias > prazo) return {tipo:'🔴', cor:'bg-rose-100 text-rose-700', texto:'OCI Pendente'};
+                    if ((dias/prazo)*100 >= 80) return {tipo:'🟡', cor:'bg-amber-100 text-amber-700', texto:'Atenção'};
+                    return {tipo:'🟢', cor:'bg-emerald-100 text-emerald-700', texto:'Dentro do Prazo'};
+                })();
 
                 return `<tr class="hover:bg-slate-50 border-b">
-                    <td class="px-4 py-3"><span class="text-sm font-bold text-blue-600">${item.numero_solicitacao || item.id}</span></td>
-                    <td class="px-4 py-3"><span class="text-sm font-bold text-purple-600">${p.prontuario || '—'}</span></td>
-                    <td class="px-4 py-3 font-bold text-sm mascara-nome">${nomeExibido}</td>
-                    <td class="px-4 py-3 text-sm font-mono mascara-cpf">${cpfExibido}</td>
-                    <td class="px-4 py-3"><span class="px-2 py-1 bg-blue-50 rounded-full text-xs font-bold">${e.icone || ''} ${e.nome || '—'}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${st.c}">${st.t}</span></td>
-                    <td class="px-4 py-3">${item.status === 'faltou' ? '🚫 Faltou' : item.status === 'retorno_faltou' ? '🚫 Faltou Retorno' : '✅ OK'}</td>
+                    <td class="px-3 py-2 text-xs font-bold text-blue-600">${item.numero_solicitacao || item.id}</td>
+                    <td class="px-3 py-2 text-xs font-bold text-purple-600">${p.prontuario || '—'}</td>
+                    <td class="px-3 py-2 font-bold text-xs mascara-nome">${nomeExibido}</td>
+                    <td class="px-3 py-2 text-xs font-mono mascara-cpf">${cpfExibido}</td>
+                    ${tipo === 'monitoramento' ? `
+                    <td class="px-3 py-2"><span class="px-2 py-1 bg-blue-50 rounded-full text-[10px] font-bold">${e.icone || ''} ${e.nome || '—'}</span></td>
+                    <td class="px-3 py-2 text-xs">${item.subgrupo_sigtap || '—'}</td>
+                    <td class="px-3 py-2"><div class="flex gap-1 flex-wrap">${timeline}</div></td>
+                    <td class="px-3 py-2"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${st.c}">${st.t}</span></td>
+                    <td class="px-3 py-2"><span class="text-xs font-bold ${diasRest.cor}">${diasRest.dias}</span></td>
+                    <td class="px-3 py-2"><span class="px-2 py-1 rounded-full text-[10px] font-bold border ${alerta.cor}">${alerta.tipo} ${alerta.texto}</span></td>
+                    ` : ''}
                 </tr>`;
             }).join('');
         }
-
         let pagHTML = '';
         if (totalPag > 1) {
             for (let i = 1; i <= totalPag; i++) {
@@ -1804,13 +1863,10 @@ function renderizarTabelas() {
 function exportarExcel(tipo) {
     const dados = getDadosFiltrados(tipo);
     if (dados.length === 0) return alert('⚠️ Nenhum dado para exportar!');
-
     const podeCompleto = podeVerDadosCompletos();
-
     const exportData = dados.map(item => {
         const p = pacientes.find(x => x.id === item.paciente_id) || {};
         const e = especialidades.find(x => x.id === item.especialidade_id) || {};
-
         const row = {
             'Nº Solicitação': item.numero_solicitacao || '',
             'Prontuário': p.prontuario || '',
@@ -1820,24 +1876,18 @@ function exportarExcel(tipo) {
             'Status': item.status || '',
             'Data': item.data_agendada || ''
         };
-
         if (tipo === 'apac' || tipo === 'apacs-geradas') {
             row['Data Fechamento'] = item.data_fechamento || '';
-            if (tipo === 'apacs-geradas') {
-                row['Nº APAC'] = item.numero_apac || '';
-            }
+            if (tipo === 'apacs-geradas') row['Nº APAC'] = item.numero_apac || '';
         }
-
         if (tipo === 'monitoramento-exames') {
             row['Exame'] = item.nome_exame || '';
             row['Data Solicitação'] = item.data_solicitacao_exame || '';
             row['Data Realização'] = item.data_realizacao_exame || '';
             row['Status Exame'] = item.status_exame || '';
         }
-
         return row;
     });
-
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, tipo.replace(/-/g, '_'));
@@ -1846,7 +1896,7 @@ function exportarExcel(tipo) {
 }
 
 // ============================================
-// GRÁFICOS (SIMPLIFICADOS)
+// GRÁFICOS
 // ============================================
 function getUltimos6Meses() {
     const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
@@ -1861,7 +1911,7 @@ function renderizarGraficos() {
     if (typeof ChartDataLabels === 'undefined') return;
     Chart.register(ChartDataLabels);
     const ml = getUltimos6Meses();
-
+    
     // Gráfico Performance
     const c1 = document.getElementById('chartPerformance');
     if (c1) {
@@ -1882,7 +1932,7 @@ function renderizarGraficos() {
             plugins: [ChartDataLabels]
         });
     }
-
+    
     // Gráfico Especialidade
     const c2 = document.getElementById('chartSpecialty');
     if (c2) {
@@ -1897,7 +1947,7 @@ function renderizarGraficos() {
             plugins: [ChartDataLabels]
         });
     }
-
+    
     // Gráfico Status
     const c6 = document.getElementById('chartStatus');
     if (c6) {
@@ -1912,7 +1962,7 @@ function renderizarGraficos() {
             plugins: [ChartDataLabels]
         });
     }
-
+    
     // Gráfico OCIs Fechadas por Mês
     const c7 = document.getElementById('chartOCIsFechadasMes');
     if (c7) {
@@ -1934,7 +1984,7 @@ function renderizarGraficos() {
             plugins: [ChartDataLabels]
         });
     }
-
+    
     // Gráfico APACs Geradas por Mês
     const c8 = document.getElementById('chartAPACsGeradasMes');
     if (c8) {
@@ -1978,62 +2028,42 @@ function logout() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🏥 FERRAMENTA OCI v7.0 REFORMADA - INICIANDO...');
     console.log('👑 Ana Paula Araújo da Silva | Mat: 201704');
-
+    
     carregarUBSnoSelect('adminNovoUbs');
     carregarUBSnoSelect('editUsuarioUbs');
     toggleUbsField();
-
-    // ========== LOGIN ==========
+    
+    // Login
     document.getElementById('btnLogin').addEventListener('click', async () => {
         const nome = document.getElementById('loginNome').value.trim();
         const cpf = limparCPF(document.getElementById('loginCPF').value);
         const senha = document.getElementById('loginSenha').value.trim();
-        
         if (!nome || !cpf || !senha) return alert('⚠️ Preencha todos os campos!');
         if (!validarCPF(cpf)) return alert('❌ CPF inválido!');
-        
         showLoading();
-        const { data, error } = await supabaseClient.rpc('login_painel_admin', {
-            p_cpf: cpf,
-            p_senha: senha
-        });
+        const { data, error } = await supabaseClient.rpc('login_painel_admin', { p_cpf: cpf, p_senha: senha });
         hideLoading();
-
-        if (error || !data || !data.success) {
-            return alert('❌ ' + (data?.message || 'Usuário não encontrado!'));
-        }
-
+        if (error || !data || !data.success) return alert('❌ ' + (data?.message || 'Usuário não encontrado!'));
         usuarioLogado = data;
-        
         const { data: userData } = await supabaseClient.from('usuarios').select('*').eq('id', usuarioLogado.id).maybeSingle();
-        if (userData) {
-            usuarioLogado.unidade_saude = userData.unidade_saude || '';
-            usuarioLogado.email = userData.email || '';
-            usuarioLogado.telefone = userData.telefone || '';
-        }
-        
+        if (userData) { usuarioLogado.unidade_saude = userData.unidade_saude || ''; usuarioLogado.email = userData.email || ''; usuarioLogado.telefone = userData.telefone || ''; }
         document.getElementById('screenLogin').style.display = 'none';
         document.getElementById('screenLogin').classList.remove('active');
         document.getElementById('screenSistema').classList.add('active');
         document.getElementById('screenSistema').style.display = 'flex';
-        
-        const tipoLabel = usuarioLogado.tipo === 'admin' ? '👑 Administrador' : 
-                         usuarioLogado.tipo === 'admin_apac' ? '📑 Admin APAC' : '👤 Usuário Comum';
+        const tipoLabel = usuarioLogado.tipo === 'admin' ? '👑 Administrador' : usuarioLogado.tipo === 'admin_apac' ? '📑 Admin APAC' : '👤 Usuário Comum';
         document.getElementById('sidebarNome').textContent = usuarioLogado.nome || 'Admin';
         document.getElementById('sidebarAvatar').textContent = (usuarioLogado.nome || 'A')[0].toUpperCase();
         document.getElementById('sidebarTipo').textContent = tipoLabel;
         document.getElementById('sidebarUBS').textContent = usuarioLogado.unidade_saude || '';
-        
         const adminSection = document.getElementById('sidebarAdminSection');
         if (adminSection) adminSection.classList.toggle('hidden', usuarioLogado.tipo !== 'admin');
-        
         const apacSection = document.getElementById('sidebarAPACSection');
         if (apacSection) apacSection.classList.toggle('hidden', !podeGerarRelatorioAPAC());
-        
         atualizarTudo();
     });
-
-    // ========== REDEFINIR SENHA ==========
+    
+    // Redefinir senha
     document.getElementById('btnResetConfirmar').addEventListener('click', async () => {
         const cpf = limparCPF(document.getElementById('resetCPF').value);
         const nomeMae = document.getElementById('resetNomeMae').value.trim();
@@ -2041,58 +2071,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const codigo = document.getElementById('resetCodigo').value.trim();
         const novaSenha = document.getElementById('resetNovaSenha').value.trim();
         const confirma = document.getElementById('resetConfirmaSenha').value.trim();
-        
         if (!cpf || !validarCPF(cpf)) return alert('❌ CPF inválido!');
         if (!cidadeNatal) return alert('❌ Informe sua cidade natal!');
         if (!codigo || codigo.length !== 6) return alert('❌ Informe o código de 6 dígitos!');
         if (!novaSenha || novaSenha.length !== 6) return alert('❌ Nova senha deve ter 6 dígitos!');
         if (novaSenha !== confirma) return alert('❌ As senhas não conferem!');
-        
         showLoading();
-        const { data, error } = await supabaseClient.rpc('redefinir_senha_admin_com_codigo', {
-            p_cpf: cpf,
-            p_nome_mae: nomeMae || '',
-            p_cidade_natal: cidadeNatal,
-            p_codigo: codigo,
-            p_nova_senha: novaSenha
-        });
+        const { data, error } = await supabaseClient.rpc('redefinir_senha_admin_com_codigo', { p_cpf: cpf, p_nome_mae: nomeMae || '', p_cidade_natal: cidadeNatal, p_codigo: codigo, p_nova_senha: novaSenha });
         hideLoading();
-        
-        if (error || !data || !data.success) {
-            return alert('❌ ' + (data?.message || 'Erro ao redefinir senha!'));
-        }
+        if (error || !data || !data.success) return alert('❌ ' + (data?.message || 'Erro ao redefinir senha!'));
         alert('✅ Senha redefinida com sucesso!');
-        ['resetCPF','resetNomeMae','resetCidadeNatal','resetCodigo','resetNovaSenha','resetConfirmaSenha'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = '';
-        });
+        ['resetCPF','resetNomeMae','resetCidadeNatal','resetCodigo','resetNovaSenha','resetConfirmaSenha'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
         showScreen('screenLogin');
     });
-
-    // ========== ENTER NO LOGIN ==========
-    document.getElementById('loginSenha').addEventListener('keydown', (e) => { 
-        if (e.key === 'Enter') document.getElementById('btnLogin').click(); 
-    });
-
-    // ========== FECHAR MODAIS ==========
-    document.getElementById('modalAdmin').addEventListener('click', function(e) { 
-        if (e.target === this) fecharModalAdmin(); 
-    });
-    document.getElementById('modalEditarUsuario').addEventListener('click', function(e) { 
-        if (e.target === this) fecharModal('modalEditarUsuario'); 
-    });
-    document.getElementById('modalRelatorioAPAC').addEventListener('click', function(e) { 
-        if (e.target === this) fecharModal('modalRelatorioAPAC'); 
-    });
-
-    // ========== ATUALIZAÇÃO AUTOMÁTICA ==========
-    setInterval(() => { 
-        if (usuarioLogado) atualizarTudo(); 
-    }, 30000);
-
+    
+    document.getElementById('loginSenha').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('btnLogin').click(); });
+    document.getElementById('modalAdmin').addEventListener('click', function(e) { if (e.target === this) fecharModalAdmin(); });
+    document.getElementById('modalEditarUsuario').addEventListener('click', function(e) { if (e.target === this) fecharModal('modalEditarUsuario'); });
+    document.getElementById('modalRelatorioAPAC').addEventListener('click', function(e) { if (e.target === this) fecharModal('modalRelatorioAPAC'); });
+    
+    setInterval(() => { if (usuarioLogado) atualizarTudo(); }, 30000);
     console.log('✅ FERRAMENTA OCI v7.0 REFORMADA INICIALIZADA COM SUCESSO!');
 });
-
 </script>
 </body>
 </html>
